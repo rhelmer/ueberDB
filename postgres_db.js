@@ -20,24 +20,29 @@ var async = require("async");
 exports.database = function(settings)
 {
   this.settings = settings;
+
+  if this.settings.url) {
+    var connString = this.settings.url;
+  } else {
   
-  var connString = "tcp://";
+    var connString = "tcp://";
+      
+    if(this.settings.user != null) {
+      connString += this.settings.user;  
+      if(this.settings.password != null)
+        connString += ":" + this.settings.password;
+      connString += "@";
+    }
     
-  if(this.settings.user != null) {
-    connString += this.settings.user;  
-    if(this.settings.password != null)
-      connString += ":" + this.settings.password;
-    connString += "@";
+    if(this.settings.host != null)
+      connString += this.settings.host;
+      
+    if(this.settings.port != null)
+      connString += ":" + this.settings.port;
+      
+    if(this.settings.database != null)
+      connString += "/" + this.settings.database;
   }
-  
-  if(this.settings.host != null)
-    connString += this.settings.host;
-    
-  if(this.settings.port != null)
-    connString += ":" + this.settings.port;
-    
-  if(this.settings.database != null)
-    connString += "/" + this.settings.database;
   
   this.settings.cache = 1000;
   this.settings.writeInterval = 100;
